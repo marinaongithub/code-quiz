@@ -1,5 +1,3 @@
-
-
 var start = document.getElementById("start");
 var time = document.getElementById("time");
 var questionDiv = document.getElementById("questions")
@@ -9,11 +7,33 @@ var choices = document.getElementById("choices");
 
 var timeLeft = 76; 
 
+// tracks index of the quizz array
+var index = 0;
+
+// current object from the quizz array
+var currQuizz;
+
 // Timer starts when button clicked
 start.addEventListener("click", function() {
     setTime();
     initQuestion();
-    nextQuestion();
+})
+
+// Next question when clic on a response
+questionDiv.addEventListener("click", function (event) {
+    var element = event.target;
+
+    if (element.matches("button")) {
+        index++;
+        currQuizz = quizz[index];
+
+        if (index < quizz.length) {
+            nextQuestion(currQuizz);
+        }
+        
+        // response = element.getAttribute("data-index")
+
+    }
 })
 
 // Handles the timer
@@ -29,6 +49,8 @@ function setTime() {
     }, 1000)
 }
 
+// Render the 1st question + choices
+
 function initQuestion() {
 
     // remove start screen
@@ -38,10 +60,10 @@ function initQuestion() {
     questionDiv.setAttribute("class", "show");
 
     // populate with current question
-    question.textContent = questions[0];          // to change
+    question.textContent = quizz[0].question;  // to change
+    console.log(quizz[0].question)          
 
     // populate list of choices
-
         // creates ul tag
     ulTag = document.createElement("ul");
 
@@ -52,51 +74,41 @@ function initQuestion() {
 
         // array to store all the button tag 
     var buArr = [bu1, bu2, bu3, bu4];
+        // adds ul tag to the choice div
+    choices.appendChild(ulTag);
 
-        // loops through the buttons array to append each of them to the ul tag with content
-    for (var i = 0; i < responses.length; i++) {
+        // loops through the buttons array to append each of them to the ultag with content from the corresponding 
+        // options from the quizz array
+    for (var i = 0; i < quizz[0].options.length; i++) {
         ulTag.appendChild(buArr[i]);
-        buArr[i].textContent = responses[i];
+        buArr[i].textContent = quizz[0].options[i];
     }
-
-
 }
 
-// Render the question + choices
-function nextQuestion() {
+
+// when I answer a question then I am presented with another question
+
+function nextQuestion(currQuizz) {
 
     // remove start screen
     startScreen.textContent = "";
 
     // show questions 
     questionDiv.setAttribute("class", "show");
-
-    // populate with current question
-    question.textContent = questions[0];          // to change
-
-    // populate list of choices
-
-        // creates ul tag
-    ulTag = document.createElement("ul");
-
-    bu1 = document.createElement("button");
-    bu2 = document.createElement("button");
-    bu3 = document.createElement("button");
-    bu4 = document.createElement("button");
+    
+    console.log(currQuizz);
+        // populate with current question
+    question.textContent = currQuizz.question;          // to change
 
         // array to store all the button tag 
     var buArr = [bu1, bu2, bu3, bu4];
 
         // loops through the buttons array to append each of them to the ul tag with content
-    for (var i = 0; i < responses.length; i++) {
-        ulTag.appendChild(buArr[i]);
-        buArr[i].textContent = responses[i];
+    for (var i = 0; i < currQuizz.options.length; i++) {
+        // ulTag.appendChild(buArr[i]);
+        buArr[i].textContent = currQuizz.options[i];
+        buArr[i].setAttribute("data-index", i);
     }
-
-        // when I answer a question then I am presented with another question
-
-
-
 }
 
 
