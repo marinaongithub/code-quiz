@@ -4,6 +4,7 @@ var questionDiv = document.getElementById("questions")
 var question = document.getElementById("question-title");
 var startScreen = document.getElementById("start-screen");
 var choices = document.getElementById("choices");
+var feedback = document.getElementById("feedback")
 
 var timeLeft = 76; 
 
@@ -17,22 +18,36 @@ var currQuizz;
 start.addEventListener("click", function() {
     setTime();
     initQuestion();
-})
+});
 
 // Next question when clic on a response
 questionDiv.addEventListener("click", function (event) {
     var element = event.target;
+    currQuizz = quizz[index];
 
     if (element.matches("button")) {
+
+        if (element.textContent === currQuizz.answer) {
+            feedback.setAttribute("class", "feedback");
+            feedback.textContent = "Correct!";
+        }
+
+        else {
+            feedback.setAttribute("class", "feedback");
+            feedback.textContent = "False!";
+            timeLeft -= 10;
+        }
+
         index++;
         currQuizz = quizz[index];
 
         if (index < quizz.length) {
             nextQuestion(currQuizz);
         }
-        
-        // response = element.getAttribute("data-index")
+        else {
 
+        }
+        
     }
 })
 
@@ -85,20 +100,15 @@ function initQuestion() {
     }
 }
 
-
 // when I answer a question then I am presented with another question
-
 function nextQuestion(currQuizz) {
-
-    // remove start screen
-    startScreen.textContent = "";
 
     // show questions 
     questionDiv.setAttribute("class", "show");
     
     console.log(currQuizz);
         // populate with current question
-    question.textContent = currQuizz.question;          // to change
+    question.textContent = currQuizz.question;
 
         // array to store all the button tag 
     var buArr = [bu1, bu2, bu3, bu4];
@@ -107,7 +117,7 @@ function nextQuestion(currQuizz) {
     for (var i = 0; i < currQuizz.options.length; i++) {
         // ulTag.appendChild(buArr[i]);
         buArr[i].textContent = currQuizz.options[i];
-        buArr[i].setAttribute("data-index", i);
+        // buArr[i].setAttribute("data-index", i);
     }
 }
 
