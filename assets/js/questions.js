@@ -8,7 +8,7 @@ var quizz = [
     {
         question: "The condition in an if/else statement is enclosed within ______.",
         options: ["1. quotes", "2. curly brakets", "3. parenthesis", "4. square brackets"],
-        answer: "3. parentheses",
+        answer: "3. parenthesis",
     },
 
     {

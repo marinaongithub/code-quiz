@@ -6,7 +6,8 @@ var startScreen = document.getElementById("start-screen");
 var choices = document.getElementById("choices");
 var feedback = document.getElementById("feedback")
 
-var timeLeft = 76; 
+var timeLeft = 20;
+var score = 0;
 
 // tracks index of the quizz array
 var index = 0;
@@ -21,35 +22,48 @@ start.addEventListener("click", function() {
 });
 
 // Next question when clic on a response
-questionDiv.addEventListener("click", function (event) {
-    var element = event.target;
-    currQuizz = quizz[index];
 
-    if (element.matches("button")) {
-
-        if (element.textContent === currQuizz.answer) {
-            feedback.setAttribute("class", "feedback");
-            feedback.textContent = "Correct!";
-        }
-
-        else {
-            feedback.setAttribute("class", "feedback");
-            feedback.textContent = "False!";
-            timeLeft -= 10;
-        }
-
-        index++;
+    questionDiv.addEventListener("click", function (event) {
+        var element = event.target;
         currQuizz = quizz[index];
 
-        if (index < quizz.length) {
-            nextQuestion(currQuizz);
-        }
-        else {
+        if (element.matches("button")) {
+            
+            // correct answer selected
+            if (element.textContent === currQuizz.answer) {
+                feedback.setAttribute("class", "feedback");
+                feedback.textContent = "Correct!";
+                score++;
+            }
 
+            // wrong answer selected
+            else {
+                feedback.setAttribute("class", "feedback");
+                feedback.textContent = "False!";
+
+                if (timeLeft > 10) {
+                    timeLeft -= 10;
+                }
+                else {
+                    gameOver();
+                }
+            }    
+
+            index++;
+            currQuizz = quizz[index];
+
+            if (index < quizz.length) {
+                nextQuestion(currQuizz);
+            }
+            else { 
+                gameOver();
+
+            }
+            console.log(score);
         }
-        
     }
-})
+)
+
 
 // Handles the timer
 function setTime() {
@@ -59,6 +73,7 @@ function setTime() {
 
         if (timeLeft === 0) {
             clearInterval(timeInterval);
+            gameOver();
         }
 
     }, 1000)
@@ -119,8 +134,10 @@ function nextQuestion(currQuizz) {
         buArr[i].textContent = currQuizz.options[i];
         // buArr[i].setAttribute("data-index", i);
     }
-}
+};
 
+function gameOver() {
+    window.open("highscores.html");
 
-
+};
 
