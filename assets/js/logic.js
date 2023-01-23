@@ -4,16 +4,19 @@ var questionDiv = document.getElementById("questions")
 var question = document.getElementById("question-title");
 var startScreen = document.getElementById("start-screen");
 var choices = document.getElementById("choices");
-var feedback = document.getElementById("feedback")
-var endScreen = document.getElementById("end-screen")
+var feedback = document.getElementById("feedback");
+var endScreen = document.getElementById("end-screen");
+var finalScore = document.getElementById("final-score");
+var submit = document.getElementById("submit");
 
-var timeLeft = 20;
+var timeLeft = 75;
 var score = 0;
+
+// tracks whether the game is ongoing or over
+var game;
 
 // tracks index of the quiz array
 var index;
-
-var game;
 
 // current object from the quiz array
 var currQuiz;
@@ -54,6 +57,7 @@ start.addEventListener("click", function() {
             }    
 
             index++;
+
             console.log(index);
             currQuiz = quiz[index];
 
@@ -73,23 +77,19 @@ start.addEventListener("click", function() {
 // Handles the timer
 function setTime() {
     var timeInterval = setInterval(function() {
-        timeLeft--;
+
         time.textContent = timeLeft;
+        timeLeft--;
 
-        console.log(index);
-        console.log(index === quiz.length);
-
-
+        // when the timer reach 0 the game is over
         if (timeLeft === 0) {
 
             clearInterval(timeInterval);
-            // when the timer reach 0 the game is over
             gameOver();
         }
-
        
-        else if (index === quiz.length -1){
-
+        // when all questions are answered clear the interval or timer is almost up
+        else if (!game) {
             clearInterval(timeInterval);
         }
 
@@ -100,6 +100,7 @@ function setTime() {
 function initQuestion() {
 
     index = 0;
+    game = true;
 
     // remove start screen
     startScreen.textContent = "";
@@ -149,12 +150,19 @@ function nextQuestion(currQuiz) {
 };
 
 function gameOver() {
-    
+
+    game = false;
     questionDiv.setAttribute("class", "hide");
     endScreen.setAttribute("class", "show");
     feedback.setAttribute("class", "feedback hide");
-
-    // window.open("highscores.html");
+    finalScore.textContent = score;
+    scoreLogs();
 
 };
 
+function scoreLogs() {
+    submit.addEventListener ("click", function () {
+        window.open("highscores.html");
+    })
+
+}
