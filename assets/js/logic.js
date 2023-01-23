@@ -5,32 +5,35 @@ var question = document.getElementById("question-title");
 var startScreen = document.getElementById("start-screen");
 var choices = document.getElementById("choices");
 var feedback = document.getElementById("feedback")
+var endScreen = document.getElementById("end-screen")
 
 var timeLeft = 20;
 var score = 0;
 
-// tracks index of the quizz array
-var index = 0;
+// tracks index of the quiz array
+var index;
 
-// current object from the quizz array
-var currQuizz;
+var game;
+
+// current object from the quiz array
+var currQuiz;
 
 // Timer starts when button clicked
 start.addEventListener("click", function() {
-    setTime();
     initQuestion();
+    setTime();
 });
 
 // Next question when clic on a response
 
     questionDiv.addEventListener("click", function (event) {
         var element = event.target;
-        currQuizz = quizz[index];
+        currQuiz = quiz[index];
 
         if (element.matches("button")) {
             
             // correct answer selected
-            if (element.textContent === currQuizz.answer) {
+            if (element.textContent === currQuiz.answer) {
                 feedback.setAttribute("class", "feedback");
                 feedback.textContent = "Correct!";
                 score++;
@@ -39,31 +42,33 @@ start.addEventListener("click", function() {
             // wrong answer selected
             else {
                 feedback.setAttribute("class", "feedback");
-                feedback.textContent = "False!";
+                feedback.textContent = "Wrong!";
 
                 if (timeLeft > 10) {
                     timeLeft -= 10;
                 }
+                // when the timer reach 0 the game is over
                 else {
                     gameOver();
                 }
             }    
 
             index++;
-            currQuizz = quizz[index];
+            console.log(index);
+            currQuiz = quiz[index];
 
-            if (index < quizz.length) {
-                nextQuestion(currQuizz);
+            console.log("index " + index);
+            if (index < quiz.length) {
+                nextQuestion(currQuiz);
             }
-            else { 
+        
+            // when all questions are answered the game stops
+            else {
                 gameOver();
-
             }
-            console.log(score);
         }
     }
 )
-
 
 // Handles the timer
 function setTime() {
@@ -71,17 +76,30 @@ function setTime() {
         timeLeft--;
         time.textContent = timeLeft;
 
+        console.log(index);
+        console.log(index === quiz.length);
+
+
         if (timeLeft === 0) {
+
             clearInterval(timeInterval);
+            // when the timer reach 0 the game is over
             gameOver();
+        }
+
+       
+        else if (index === quiz.length -1){
+
+            clearInterval(timeInterval);
         }
 
     }, 1000)
 }
 
 // Render the 1st question + choices
-
 function initQuestion() {
+
+    index = 0;
 
     // remove start screen
     startScreen.textContent = "";
@@ -90,8 +108,7 @@ function initQuestion() {
     questionDiv.setAttribute("class", "show");
 
     // populate with current question
-    question.textContent = quizz[0].question;  // to change
-    console.log(quizz[0].question)          
+    question.textContent = quiz[index].question;  // to change?
 
     // populate list of choices
         // creates ul tag
@@ -108,36 +125,36 @@ function initQuestion() {
     choices.appendChild(ulTag);
 
         // loops through the buttons array to append each of them to the ultag with content from the corresponding 
-        // options from the quizz array
-    for (var i = 0; i < quizz[0].options.length; i++) {
+        // options from the quiz array
+    for (var i = 0; i < quiz[0].options.length; i++) {
         ulTag.appendChild(buArr[i]);
-        buArr[i].textContent = quizz[0].options[i];
+        buArr[i].textContent = quiz[0].options[i];
     }
 }
 
 // when I answer a question then I am presented with another question
-function nextQuestion(currQuizz) {
-
-    // show questions 
-    questionDiv.setAttribute("class", "show");
+function nextQuestion(currQuiz) {
     
-    console.log(currQuizz);
+    console.log(currQuiz);
         // populate with current question
-    question.textContent = currQuizz.question;
+    question.textContent = currQuiz.question;
 
         // array to store all the button tag 
     var buArr = [bu1, bu2, bu3, bu4];
 
         // loops through the buttons array to append each of them to the ul tag with content
-    for (var i = 0; i < currQuizz.options.length; i++) {
-        // ulTag.appendChild(buArr[i]);
-        buArr[i].textContent = currQuizz.options[i];
-        // buArr[i].setAttribute("data-index", i);
+    for (var i = 0; i < currQuiz.options.length; i++) {
+        buArr[i].textContent = currQuiz.options[i];
     }
 };
 
 function gameOver() {
-    window.open("highscores.html");
+    
+    questionDiv.setAttribute("class", "hide");
+    endScreen.setAttribute("class", "show");
+    feedback.setAttribute("class", "feedback hide");
+
+    // window.open("highscores.html");
 
 };
 
