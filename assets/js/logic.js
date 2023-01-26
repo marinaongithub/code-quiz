@@ -7,6 +7,7 @@ var choices = document.getElementById("choices");
 var feedback = document.getElementById("feedback");
 var endScreen = document.getElementById("end-screen");
 var finalScore = document.getElementById("final-score");
+var initials = document.getElementById("initials");
 var submit = document.getElementById("submit");
 
 var timeLeft = 75;
@@ -156,13 +157,22 @@ function gameOver() {
     endScreen.setAttribute("class", "show");
     feedback.setAttribute("class", "feedback hide");
     finalScore.textContent = score;
-    scoreLogs();
+    // var initial = initials.textContent;
+   
 
-};
 
-function scoreLogs() {
-    submit.addEventListener ("click", function () {
+    submit.addEventListener ("click", function (event) {
+        event.preventDefault();
+
+        localStorage.setItem("initials", initials.value); 
+        localStorage.setItem("score", score); 
+
         window.open("highscores.html");
-    })
 
+    })
 }
+
+
+
+
+
