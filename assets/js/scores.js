@@ -1,12 +1,22 @@
 var highscores = document.getElementById("highscores");
+var clear = document.getElementById("clear");
 
 var newLog;
-
 // will temporarly store the scores from the local storage + the new logged score
 var scores = [];
 
 
+if (highscores !== null) {
+// Logs score history
 scoreLog();
+
+// clears score history
+clear.addEventListener("click", function () {
+    localStorage.clear();
+    location.reload()
+})
+
+}
 
 
 function scoreLog() {
@@ -44,12 +54,14 @@ function scoreLog() {
     }    
 
     // appends scores to the html
-    if (highscores !== null) {
-        var logArr = JSON.parse(localStorage.getItem("storeLog"));
+    var logArr = JSON.parse(localStorage.getItem("storeLog"));
+
+    if (logArr !== null) {
         for (var i = 0; i < logArr.length; i++) {
             liEl = document.createElement('li');
             liEl.textContent = `${logArr[i].initials} - ${logArr[i].score}`;
             highscores.appendChild(liEl);
-            }
         }
+    }   
+        
 }
