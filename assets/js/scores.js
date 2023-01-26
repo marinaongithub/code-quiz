@@ -5,19 +5,18 @@ var newLog;
 // will temporarly store the scores from the local storage + the new logged score
 var scores = [];
 
-
+// if highscores html is loaded
 if (highscores !== null) {
-// Logs score history
-scoreLog();
+    
+    // Logs score history
+    scoreLog();
 
-// clears score history
-clear.addEventListener("click", function () {
-    localStorage.clear();
-    location.reload()
-})
-
+    // clears score history when clear button is clicked
+    clear.addEventListener("click", function () {
+        localStorage.clear();
+        location.reload()
+    })
 }
-
 
 function scoreLog() {
 

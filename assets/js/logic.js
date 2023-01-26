@@ -29,23 +29,24 @@ start.addEventListener("click", function() {
 });
 
 // Next question when clic on a response
-
     questionDiv.addEventListener("click", function (event) {
         var element = event.target;
         currQuiz = quiz[index];
 
         if (element.matches("button")) {
-            
+
+            feedback.setAttribute("class", "feedback");
+
             // correct answer selected
             if (element.textContent === currQuiz.answer) {
-                feedback.setAttribute("class", "feedback");
+               
                 feedback.textContent = "Correct!";
                 score++;
             }
 
             // wrong answer selected
             else {
-                feedback.setAttribute("class", "feedback");
+                
                 feedback.textContent = "Wrong!";
 
                 if (timeLeft > 10) {
@@ -55,14 +56,15 @@ start.addEventListener("click", function() {
                 else {
                     gameOver();
                 }
-            }    
+            }
+
+            // hide feedback after 1 seconde
+            setTimeout(function () {feedback.setAttribute("class", "feedback hide")}, 750);    
 
             index++;
 
-            console.log(index);
             currQuiz = quiz[index];
 
-            console.log("index " + index);
             if (index < quiz.length) {
                 nextQuestion(currQuiz);
             }
@@ -137,7 +139,6 @@ function initQuestion() {
 // when I answer a question then I am presented with another question
 function nextQuestion(currQuiz) {
     
-    console.log(currQuiz);
         // populate with current question
     question.textContent = currQuiz.question;
 
