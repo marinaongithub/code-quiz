@@ -156,10 +156,8 @@ function gameOver() {
     game = false;
     questionDiv.setAttribute("class", "hide");
     endScreen.setAttribute("class", "show");
-    feedback.setAttribute("class", "feedback hide");
-    finalScore.textContent = score;
-    // var initial = initials.textContent;
-   
+    // feedback.setAttribute("class", "feedback hide");
+    finalScore.textContent = score;   
 
 
     submit.addEventListener ("click", function (event) {
